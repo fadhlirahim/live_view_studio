@@ -73,6 +73,15 @@ defmodule LiveViewStudio.Stores do
         zip: "80204",
         open: true,
         hours: "8am - 10pm M-F"
+      },
+      %{
+        name: "Klinik Temasya",
+        street: "B1-G-09",
+        phone_number: "720-555-0170",
+        city: "Shah Alam, MY",
+        zip: "40150",
+        open: true,
+        hours: "8am - 10pm M-F"
       }
     ]
   end
