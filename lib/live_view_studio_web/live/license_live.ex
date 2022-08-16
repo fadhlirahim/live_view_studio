@@ -5,17 +5,17 @@ defmodule LiveViewStudioWeb.LicenseLive do
   import Number.Currency
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, seats: 3, amount: Licenses.calculate(3))
+    socket = assign(socket, seats: 2, amount: Licenses.calculate(2))
     {:ok, socket}
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <h1>Team License</h1>
     <div id="license">
       <div class="card">
         <div class="content">
-          <div class="seats">
+          <div id="seats" class="seats">
             <img src="images/license.svg">
             <span>
               Your license is currently for
@@ -23,12 +23,12 @@ defmodule LiveViewStudioWeb.LicenseLive do
             </span>
           </div>
 
-          <form phx-change="update">
+          <form id="update-seats" phx-change="update">
             <input type="range" min="1" max="10"
-                  name="seats" value="<%= @seats %>" />
+                  name="seats" value={@seats} />
           </form>
 
-          <div class="amount">
+          <div id="amount" class="amount">
             <%= number_to_currency(@amount) %>
           </div>
         </div>
@@ -40,12 +40,8 @@ defmodule LiveViewStudioWeb.LicenseLive do
   def handle_event("update", %{"seats" => seats}, socket) do
     seats = String.to_integer(seats)
 
-    socket =
-      assign(socket,
-        seats: seats,
-        amount: Licenses.calculate(seats)
-      )
-
+    socket = assign(socket, seats: seats, amount: Licenses.calculate(seats))
     {:noreply, socket}
   end
+
 end
