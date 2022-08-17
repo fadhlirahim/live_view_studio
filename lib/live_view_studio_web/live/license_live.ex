@@ -25,6 +25,7 @@ defmodule LiveViewStudioWeb.LicenseLive do
 
           <form phx-change="update">
             <input type="range" min="1" max="10"
+                   phx-debounce="250"
                   name="seats" value="<%= @seats %>" />
           </form>
 
