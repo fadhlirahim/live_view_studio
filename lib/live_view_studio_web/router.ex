@@ -24,6 +24,7 @@ defmodule LiveViewStudioWeb.Router do
     live "/search", SearchLive
     live "/autocomplete", AutocompleteLive
     live "/filter", FilterLive
+    live "/repos", GitReposLive
   end
 
   # Other scopes may use custom stacks.
