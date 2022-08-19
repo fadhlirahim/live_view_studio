@@ -33,7 +33,7 @@ defmodule LiveViewStudioWeb.SortLive do
   end
 
   def handle_event("select-per-page", %{"per-page" => per_page}, socket) do
-    per_page = param_to_integer(per_page, 5)
+    per_page = String.to_integer(per_page)
 
     socket =
       push_patch(socket,
@@ -102,6 +102,8 @@ defmodule LiveViewStudioWeb.SortLive do
 
   defp emoji(:asc), do: "👇"
   defp emoji(:desc), do: "👆"
+
+  defp param_to_integer(nil, default_value), do: default_value
 
   defp param_to_integer(param, default_value) do
     case Integer.parse(param) do
