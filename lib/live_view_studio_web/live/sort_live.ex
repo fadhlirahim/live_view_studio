@@ -4,12 +4,12 @@ defmodule LiveViewStudioWeb.SortLive do
   alias LiveViewStudio.Donations
 
   def mount(_params, _session, socket) do
-    {:ok, socket, temporary_assigns: [donations: []]}
+    {:ok, assign(socket, total_donations: Donations.count_donations()), temporary_assigns: [donations: []]}
   end
 
   def handle_params(params, _url, socket) do
-    page = String.to_integer(params["page"] || "1")
-    per_page = String.to_integer(params["per_page"] || "5")
+    page = param_to_integer(params["page"], 1)
+    per_page = param_to_integer(params["per_page"], 5)
 
     sort_by = (params["sort_by"] || "id") |> String.to_atom()
     sort_order = (params["sort_order"] || "asc") |> String.to_atom()
@@ -33,7 +33,7 @@ defmodule LiveViewStudioWeb.SortLive do
   end
 
   def handle_event("select-per-page", %{"per-page" => per_page}, socket) do
-    per_page = String.to_integer(per_page)
+    per_page = param_to_integer(per_page, 5)
 
     socket =
       push_patch(socket,
@@ -72,10 +72,16 @@ defmodule LiveViewStudioWeb.SortLive do
 
   defp sort_link(socket, text, sort_by, options) do
     text =
-      if sort_by == options.sort_by do
-        text <> emoji(options.sort_order)
-      else
-        text
+      # if sort_by == options.sort_by do
+      #   text <> emoji(options.sort_order)
+      # else
+      #   text
+      # end
+      case options do
+        %{sort_by: ^sort_by, sort_order: sort_order} ->
+          text <> emoji(options.sort_order)
+        _ ->
+          text
       end
 
     live_patch(text,
@@ -96,4 +102,14 @@ defmodule LiveViewStudioWeb.SortLive do
 
   defp emoji(:asc), do: "👇"
   defp emoji(:desc), do: "👆"
+
+  defp param_to_integer(param, default_value) do
+    case Integer.parse(param) do
+      {number, _} ->
+        number
+
+      :error ->
+        default_value
+    end
+  end
 end
