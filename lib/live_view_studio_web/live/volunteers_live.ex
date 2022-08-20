@@ -46,7 +46,7 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     changeset =
       %Volunteer{}
       |> Volunteers.change_volunteer(params)
-      |> Map.put(:action, :insert)
+      |> Map.put(:action, :insert) # need to explicitly to display live validation
 
     socket =
       assign(socket,
