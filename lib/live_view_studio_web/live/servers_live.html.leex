@@ -7,8 +7,6 @@
                  to: Routes.servers_path(@socket, :new),
                  class: "button" %>
 
-
-
       <%= for server <- @servers do %>
         <div>
           <%= live_patch link_body(server),
@@ -28,13 +26,15 @@
       <%= if @live_action == :new do %>
 
         <%= f = form_for @changeset, "#",
-                phx_submit: "save"  %>
+                phx_submit: "save",
+                phx_change: "validate" %>
 
         <div class="field">
           <%= label f, :name %>
           <%= text_input f, :name,
                         placeholder: "Name",
-                        autocomplete: "off" %>
+                        autocomplete: "off",
+                        phx_debounce: "blur" %>
           <%= error_tag f, :name %>
         </div>
 
@@ -42,7 +42,8 @@
           <%= label f, :framework %>
           <%= text_input f, :framework,
                         placeholder: "Framework",
-                        autocomplete: "off" %>
+                        autocomplete: "off",
+                        phx_debounce: "blur" %>
           <%= error_tag f, :framework %>
         </div>
 
@@ -50,7 +51,8 @@
           <%= label f, :size, "Size (MB)" %>
           <%= text_input f, :size,
                         placeholder: "Size (MB)",
-                        autocomplete: "off" %>
+                        autocomplete: "off",
+                        phx_debounce: "blur" %>
           <%= error_tag f, :size %>
         </div>
 
@@ -58,7 +60,8 @@
           <%= label f, :git_repo %>
           <%= text_input f, :git_repo,
                         placeholder: "Git Repo",
-                        autocomplete: "off" %>
+                        autocomplete: "off",
+                        phx_debounce: "blur" %>
           <%= error_tag f, :git_repo %>
         </div>
 
