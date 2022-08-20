@@ -591,6 +591,11 @@ ul.examples {
       @apply flex-1 mr-4;
     }
 
+    input[type="text"]:focus,
+    textarea:focus {
+      @apply outline-none border-indigo-300 ring ring-indigo-300;
+    }
+
     input[type="text"],
     input[type="tel"] {
       @apply w-full appearance-none px-3 py-2 border border-cool-gray-400 rounded-md transition duration-150 ease-in-out text-base leading-5 text-xl;
