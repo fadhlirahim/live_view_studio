@@ -19,59 +19,59 @@ defmodule LiveViewStudioWeb.ServersLive do
     {:ok, socket}
   end
 
-  def handle_params(_params, _url, socket) do
-    if socket.assigns.live_action == :new do
+  # def handle_params(_params, _url, socket) do
+  #   if socket.assigns.live_action == :new do
 
-      # The live_action is "new", so the form is being
-      # displayed. Therefore, assign an empty changeset
-      # for the form. Also don't show the selected
-      # server in the sidebar which would be confusing.
+  #     # The live_action is "new", so the form is being
+  #     # displayed. Therefore, assign an empty changeset
+  #     # for the form. Also don't show the selected
+  #     # server in the sidebar which would be confusing.
 
-      changeset = Servers.change_server(%Server{})
+  #     changeset = Servers.change_server(%Server{})
 
-      socket =
-        assign(socket,
-          selected_server: nil,
-          changeset: changeset
-        )
+  #     socket =
+  #       assign(socket,
+  #         selected_server: nil,
+  #         changeset: changeset
+  #       )
 
-      {:noreply, socket}
-    else
+  #     {:noreply, socket}
+  #   else
 
-      # The live_action is NOT "new", so the form
-      # is NOT being displayed. Therefore, don't assign
-      # an empty changeset. Instead, just select the
-      # first server in list. This previously happened
-      # in "mount", but since "handle_params" is always
-      # invoked after "mount", we decided to select the
-      # default server here instead of in "mount".
+  #     # The live_action is NOT "new", so the form
+  #     # is NOT being displayed. Therefore, don't assign
+  #     # an empty changeset. Instead, just select the
+  #     # first server in list. This previously happened
+  #     # in "mount", but since "handle_params" is always
+  #     # invoked after "mount", we decided to select the
+  #     # default server here instead of in "mount".
 
-      socket =
-        assign(socket,
-          selected_server: hd(socket.assigns.servers)
-        )
+  #     socket =
+  #       assign(socket,
+  #         selected_server: hd(socket.assigns.servers)
+  #       )
 
-      {:noreply, socket}
-    end
+  #     {:noreply, socket}
+  #   end
+  # end
+
+  def handle_params(%{"id" => id}, _url, socket) do
+    id = String.to_integer(id)
+
+    server = Servers.get_server!(id)
+
+    socket =
+      assign(socket,
+        selected_server: server,
+        page_title: "What's up #{server.name}?"
+      )
+
+    {:noreply, socket}
   end
 
-  # def handle_params(%{"id" => id}, _url, socket) do
-  #   id = String.to_integer(id)
-
-  #   server = Servers.get_server!(id)
-
-  #   socket =
-  #     assign(socket,
-  #       selected_server: server,
-  #       page_title: "What's up #{server.name}?"
-  #     )
-
-  #   {:noreply, socket}
-  # end
-
-  # def handle_params(_, _url, socket) do
-  #   {:noreply, socket}
-  # end
+  def handle_params(_, _url, socket) do
+    {:noreply, socket}
+  end
 
   def handle_event("save", %{"server" => params}, socket) do
     case Servers.create_server(params) do
@@ -115,6 +115,38 @@ defmodule LiveViewStudioWeb.ServersLive do
       |> Map.put(:action, :insert)
 
     socket = assign(socket, changeset: changeset)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("toggle-status", %{"id" => id}, socket) do
+    server = Servers.get_server!(id)
+
+    # Update the server's status to the opposite of its current status:
+    new_status = if server.status == "up", do: "down", else: "up"
+
+    {:ok, _server} =
+      Servers.update_server(server, %{status: new_status})
+
+    socket = assign(socket, selected_server: server)
+
+    # Refetch the list of servers to update the server's red or
+    # green status indicator displayed in the sidebar:
+    servers = Servers.list_servers()
+    socket = assign(socket, servers: servers)
+
+    # Or, to avoid another database hit, you can find the matching
+    # server in the current list of servers, change it, and update
+    # the list of servers:
+    socket =
+      update(socket, :servers, fn servers ->
+        for s <- servers do
+          case s.id == server.id do
+            true -> server
+            _ -> s
+          end
+        end
+      end)
 
     {:noreply, socket}
   end
