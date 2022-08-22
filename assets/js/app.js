@@ -18,7 +18,6 @@ import NProgress from "nprogress";
 import { LiveSocket } from "phoenix_live_view";
 import InfiniteScroll from "./infinite-scroll";
 import DatePicker from "./datepicker";
-import flatpickr from "flatpickr";
 import PhoneFormat from "./phone-format";
 
 let Hooks = {

@@ -1,3 +1,5 @@
+import flatpickr from "flatpickr";
+
 const DatePicker = {
   mounted() {
     flatpickr(this.el, {
