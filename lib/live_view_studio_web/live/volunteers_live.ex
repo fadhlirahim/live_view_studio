@@ -14,7 +14,8 @@ defmodule LiveViewStudioWeb.VolunteersLive do
     socket =
       assign(socket,
         volunteers: volunteers,
-        changeset: changeset
+        changeset: changeset,
+        recent_activity: nil
       )
 
     {:ok, socket, temporary_assigns: [volunteers: []]}
@@ -69,6 +70,8 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         fn volunteers -> [volunteer | volunteers] end
       )
 
+    socket = recent_activity(socket, volunteer)
+
     {:noreply, socket}
   end
 
@@ -80,6 +83,15 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         fn volunteers -> [volunteer | volunteers] end
       )
 
+    socket = recent_activity(socket, volunteer)
+
     {:noreply, socket}
+  end
+
+  defp recent_activity(socket, volunteer) do
+    assign(socket,
+        recent_activity: "#{volunteer.name} checked
+          #{if volunteer.checked_out, do: "out", else: "in"}"
+      )
   end
 end

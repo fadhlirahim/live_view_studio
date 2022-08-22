@@ -1,4 +1,8 @@
-<h1>Volunteer Check-In</h1>
+<%= live_component @socket,
+                   LiveViewStudioWeb.HeaderComponent,
+                   title: "Volunteer Check-In",
+                   subtitle: @recent_activity %>
+
 <div id="checkin">
   <%= f = form_for @changeset, "#",
             phx_submit: "save",
