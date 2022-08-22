@@ -45,4 +45,41 @@
       </li>
     </ul>
   </article>
+
+  <article class="column">
+    <h2>Examples</h2>
+    <ul>
+      <li>
+        <%= live_redirect "Light", to: Routes.live_path(@socket, LiveViewStudioWeb.LightLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Team License", to: Routes.live_path(@socket, LiveViewStudioWeb.LicenseLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Sales Dashboard", to: Routes.live_path(@socket, LiveViewStudioWeb.SalesDashboardLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Search", to: Routes.live_path(@socket, LiveViewStudioWeb.SearchLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Autocomplete", to: Routes.live_path(@socket, LiveViewStudioWeb.AutocompleteLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Filter", to: Routes.live_path(@socket, LiveViewStudioWeb.FilterLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Servers", to: Routes.live_path(@socket, LiveViewStudioWeb.ServersLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Paginate", to: Routes.live_path(@socket, LiveViewStudioWeb.PaginateLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Paginate Vehicles", to: Routes.live_path(@socket, LiveViewStudioWeb.VehiclesLive) %>
+      </li>
+      <li>
+        <%= live_redirect "Form Volunteer ", to: Routes.live_path(@socket, LiveViewStudioWeb.VolunteersLive) %>
+      </li>
+    </ul>
+  </article>
+
 </section>
