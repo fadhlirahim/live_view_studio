@@ -22,6 +22,11 @@ defmodule LiveViewStudioWeb.QuoteComponent do
         <%= @weight %> pounds of <%= @material %>
         for <%= number_to_currency(@price) %>
       </h3>
+
+      <h4 class="text-xl font-semibold text-indigo-600">
+        plus <%= number_to_currency(@delivery_charge) %> delivery
+      </h4>
+
       <div class="text-gray-600">
         expires in <%= @hrs_until_expires %> hours
       </div>
