@@ -8,7 +8,7 @@ const DatePicker = {
   },
 
   handleDatePicked(selectedDates, dateStr, instance) {
-    // send the dateStr to the LiveView
+    // send the dateStr to the LiveView. See DatePickerLive date_picker_live.ex
     this.pushEvent("dates-picked", dateStr);
   }
 }
