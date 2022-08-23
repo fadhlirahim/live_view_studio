@@ -104,7 +104,6 @@ defmodule LiveViewStudioWeb.ServersLive do
       end)
 
     {:noreply, socket}
->>>>>>> 16-extracting-components-extra
   end
 
   defp link_body(server) do
