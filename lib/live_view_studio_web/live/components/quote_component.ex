@@ -4,7 +4,9 @@ defmodule LiveViewStudioWeb.QuoteComponent do
   import Number.Currency
 
   def mount(socket) do
-    {:ok, assign(socket, hrs_until_expires: 24)}
+    {:ok, assign(socket,
+            hrs_until_expires: 24,
+            delivery_charge: nil)}
   end
 
   def render(assigns) do
