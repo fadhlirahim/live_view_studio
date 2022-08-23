@@ -24,7 +24,7 @@ defmodule LiveViewStudioWeb.VehiclesLive do
     vehicles =
       Vehicles.list_vehicles(
         paginate: paginate_options,
-        sort: sort_options,
+        sort: sort_options
       )
 
     socket =
@@ -73,7 +73,7 @@ defmodule LiveViewStudioWeb.VehiclesLive do
   defp sort_link(socket, text, sort_by, options) do
     text =
       case options do
-        %{sort_by: ^sort_by, sort_order: sort_order} ->
+        %{sort_by: ^sort_by, sort_order: _sort_order} ->
           text <> emoji(options.sort_order)
         _ ->
           text
