@@ -9,25 +9,26 @@ defmodule LiveViewStudioWeb.ServersLiveTest do
 
     {:ok, view, _html} = live(conn, "/servers")
 
-    assert has_element?(view, "nav", first.name)
+    # order by desc id
     assert has_element?(view, "nav", second.name)
-    assert has_element?(view, "#selected-server", first.name)
+    assert has_element?(view, "nav", first.name)
+    assert has_element?(view, "#selected-server", second.name)
 
     view
-    |> element("nav a", second.name)
+    |> element("nav a", first.name)
     |> render_click()
 
-    assert has_element?(view, "#selected-server", second.name)
-    assert_patched(view, "/servers?id=#{second.id}")
+    assert has_element?(view, "#selected-server", first.name)
+    assert_patched(view, "/servers?id=#{first.id}")
   end
 
   test "selects the server identified in the URL", %{conn: conn} do
-    _first = create_server("First")
-    second = create_server("Second")
+    first = create_server("First")
+    _second = create_server("Second")
 
-    {:ok, view, _html} = live(conn, "/servers?id=#{second.id}")
+    {:ok, view, _html} = live(conn, "/servers?id=#{first.id}")
 
-    assert has_element?(view, "#selected-server", second.name)
+    assert has_element?(view, "#selected-server", first.name)
   end
 
   defp create_server(name) do

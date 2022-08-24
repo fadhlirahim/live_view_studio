@@ -78,7 +78,7 @@ defmodule LiveViewStudioWeb.SortLive do
       #   text
       # end
       case options do
-        %{sort_by: ^sort_by, sort_order: sort_order} ->
+        %{sort_by: ^sort_by, sort_order: _sort_order} ->
           text <> emoji(options.sort_order)
         _ ->
           text

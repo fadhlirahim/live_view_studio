@@ -3,8 +3,8 @@
 <div id="servers">
   <div class="sidebar">
     <nav>
-       <%= live_patch "New Server",
-                 to: Routes.servers_path(@socket, :new),
+      <%= live_patch "New Server",
+            to: Routes.servers_path(@socket, :new),
                  class: "button" %>
 
       <%= for server <- @servers do %>
@@ -21,7 +21,7 @@
     </nav>
   </div>
 
-  <div class="main">
+  <div class="main" id="selected-server">
     <div class="wrapper">
       <%= if @live_action == :new do %>
         <%= live_component @socket,
