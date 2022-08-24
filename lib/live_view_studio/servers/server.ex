@@ -18,7 +18,7 @@ defmodule LiveViewStudio.Servers.Server do
   @doc false
   def changeset(server, attrs) do
     server
-    |> cast(attrs, [:name, :framework, :size, :git_repo, :status])
+    |> cast(attrs, [:name, :framework, :size, :git_repo, :status, :deploy_count, :last_commit_id, :last_commit_message])
     |> validate_required([:name, :framework, :size, :git_repo])
     |> validate_length(:name, min: 2, max: 100)
     |> validate_length(:framework, min: 2, max: 50)
