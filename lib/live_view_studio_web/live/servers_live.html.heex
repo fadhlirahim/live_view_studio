@@ -21,19 +21,19 @@
     </nav>
   </div>
 
-  <div class="main" id="selected-server">
+  <div id="servers" class="main" >
     <div class="wrapper">
       <%= if @live_action == :new do %>
         <%= live_component @socket,
                          LiveViewStudioWeb.ServerFormComponent,
                          id: :new %>
-  
+
 
       <% else %>
-        <%= live_component @socket, 
-                          LiveViewStudioWeb.ServerComponent, 
+        <%= live_component @socket,
+                          LiveViewStudioWeb.ServerComponent,
                           id: "server-#{@selected_server.id}",
-                          selected_server: @selected_server %>     
+                          selected_server: @selected_server %>
       <% end %>
 
     </div>
