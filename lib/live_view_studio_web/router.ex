@@ -28,12 +28,16 @@ defmodule LiveViewStudioWeb.Router do
     live "/autocomplete", AutocompleteLive
     live "/filter", FilterLive
     live "/servers", ServersLive
+    live "/servers/new", ServersLive, :new
     live "/paginate", PaginateLive
+    live "/vehicles", VehiclesLive
     live "/sort", SortLive
     live "/volunteers", VolunteersLive
+    live "/datepicker", DatePickerLive
     live "/infinite-scroll", InfiniteScrollLive
     live "/sandbox", SandboxLive
   end
+
 
   # Other scopes may use custom stacks.
   # scope "/api", LiveViewStudioWeb do
