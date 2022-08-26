@@ -25,4 +25,30 @@ defmodule LiveViewStudioWeb.SalesDashboardLiveTest do
 
     refute render(view) =~ before_refresh
   end
+
+  test "refreshes the sales amount every tick", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/sales-dashboard")
+
+    before_refresh_sales_amount =
+      view
+      |> render()
+      |> get_text_for_selector("#sales-amount")
+
+    send(view.pid, :tick)
+
+    after_refresh_sales_amount =
+      view
+      |> render()
+      |> get_text_for_selector("#sales-amount")
+
+    refute before_refresh_sales_amount =~ after_refresh_sales_amount
+  end
+
+  # Use Flocki
+  defp get_text_for_selector(html, selector) do
+    html
+    |> Floki.parse_document!()
+    |> Floki.find(selector)
+    |> Floki.text()
+  end
 end
