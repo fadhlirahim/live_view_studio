@@ -28,13 +28,17 @@ defmodule LiveViewStudioWeb.Router do
     live "/autocomplete", AutocompleteLive
     live "/filter", FilterLive
     live "/servers", ServersLive
+    live "/servers/new", ServersLive, :new
     live "/paginate", PaginateLive
+    live "/vehicles", VehiclesLive
     live "/sort", SortLive
     live "/volunteers", VolunteersLive
+    live "/datepicker", DatePickerLive
     live "/infinite-scroll", InfiniteScrollLive
     live "/sandbox", SandboxLive
     live "/chart", ChartLive
   end
+
 
   # Other scopes may use custom stacks.
   # scope "/api", LiveViewStudioWeb do
@@ -62,9 +66,8 @@ defmodule LiveViewStudioWeb.Router do
   scope "/", LiveViewStudioWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    live "/users/register", RegisterLive
+    live "/users/register", RegisterLive, :new, as: :user_registration
 
-    get "/users/register", UserRegistrationController, :new
     post "/users/register", UserRegistrationController, :create
     get "/users/log_in", UserSessionController, :new
     post "/users/log_in", UserSessionController, :create

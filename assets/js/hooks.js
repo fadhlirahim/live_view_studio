@@ -1,6 +1,11 @@
 import LineChart from "./line-chart"
+import DatePicker from "./datepicker";
+import PhoneFormat from "./phone-format";
 
-let Hooks = {};
+let Hooks = {
+  DatePicker: DatePicker,
+  PhoneFormat: PhoneFormat,
+};
 
 Hooks.LineChart = {
   mounted() {

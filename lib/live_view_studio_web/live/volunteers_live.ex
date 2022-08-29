@@ -25,6 +25,8 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         fn volunteers -> [volunteer | volunteers] end
       )
 
+    socket = recent_activity(socket, volunteer)
+
     {:noreply, socket}
   end
 
@@ -36,12 +38,15 @@ defmodule LiveViewStudioWeb.VolunteersLive do
         fn volunteers -> [volunteer | volunteers] end
       )
 
-    socket =
-      assign(socket,
-        recent_activity: "#{volunteer.name} checked
-          #{if volunteer.checked_out, do: "out", else: "in"}!"
-      )
+    socket = recent_activity(socket, volunteer)
 
     {:noreply, socket}
+  end
+
+  defp recent_activity(socket, volunteer) do
+    assign(socket,
+      recent_activity: "#{volunteer.name} checked
+        #{if volunteer.checked_out, do: "out", else: "in"}!"
+    )
   end
 end
