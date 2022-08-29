@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "chart.js": "^2.9.4",
-    "leaflet": "^1.7.1",
     "flatpickr": "^4.6.13",
+    "leaflet": "^1.7.1",
     "libphonenumber-js": "^1.10.13",
     "nprogress": "^0.2.0",
     "phoenix": "file:../deps/phoenix",
