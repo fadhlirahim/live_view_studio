@@ -55,6 +55,19 @@ defmodule LiveViewStudioWeb.VehiclesLive do
     {:noreply, socket}
   end
 
+  def handle_event("paginate", %{"key" => "ArrowRight"}, socket) do
+    {:noreply, goto_page(socket, socket.assigns.options.page + 1)}
+  end
+
+  def handle_event("paginate", %{"key" => "ArrowLeft"}, socket) do
+    {:noreply, goto_page(socket, socket.assigns.options.page - 1)}
+  end
+
+  def handle_event("paginate", %{"key" => key}, socket) do
+    IO.inspect(key)
+    {:noreply, socket}
+  end
+
   defp pagination_link(socket, text, page, options, class) do
     live_patch(text,
       to:
@@ -91,6 +104,23 @@ defmodule LiveViewStudioWeb.VehiclesLive do
         )
     )
   end
+
+  defp goto_page(socket, page) when page > 0 do
+    push_patch(socket,
+        to:
+          Routes.live_path(
+            socket,
+            __MODULE__,
+            page: page,
+            per_page: socket.assigns.options.per_page,
+            sort_by: socket.assigns.options.sort_by,
+            sort_order: socket.assigns.options.sort_order
+          )
+      )
+  end
+
+  defp goto_page(socket, _page), do: socket
+
 
   defp toggle_sort_order(:asc), do: :desc
   defp toggle_sort_order(:desc), do: :asc

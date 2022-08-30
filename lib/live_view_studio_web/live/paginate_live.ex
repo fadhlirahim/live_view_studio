@@ -40,6 +40,19 @@ defmodule LiveViewStudioWeb.PaginateLive do
     {:noreply, socket}
   end
 
+  def handle_event("paginate", %{"key" => "ArrowRight"}, socket) do
+    {:noreply, goto_page(socket, socket.assigns.options.page + 1)}
+  end
+
+  def handle_event("paginate", %{"key" => "ArrowLeft"}, socket) do
+    {:noreply, goto_page(socket, socket.assigns.options.page - 1)}
+  end
+
+  def handle_event("paginate", %{"key" => key}, socket) do
+    IO.inspect(key)
+    {:noreply, socket}
+  end
+
   defp expires_class(donation) do
     if Donations.almost_expired?(donation), do: "eat-now", else: "fresh"
   end
@@ -56,4 +69,18 @@ defmodule LiveViewStudioWeb.PaginateLive do
       class: class
     )
   end
+
+  defp goto_page(socket, page) when page > 0 do
+    push_patch(socket,
+        to:
+          Routes.live_path(
+            socket,
+            __MODULE__,
+            page: page,
+            per_page: socket.assigns.options.per_page
+          )
+      )
+  end
+
+  defp goto_page(socket, _page), do: socket
 end
