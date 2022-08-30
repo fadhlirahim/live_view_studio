@@ -27,7 +27,7 @@ defmodule LiveViewStudioWeb.SalesDashboardLive do
           </span>
         </div>
         <div class="stat">
-          <span class="value">
+          <span id="sales-amount" class="value">
             $<%= @sales_amount %>
           </span>
           <span class="name">

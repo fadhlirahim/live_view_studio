@@ -51,12 +51,9 @@ defmodule LiveViewStudioWeb.AutocompleteLive do
         <% end %>
       </datalist>
 
-
-      <%= if @loading do %>
-        <div class="loader">
-          Loading...
-        </div>
-      <% end %>
+      <%= live_component @socket,
+                         LiveViewStudioWeb.LoadingComponent,
+                         loading: @loading %>
 
       <div class="stores">
         <ul>
@@ -109,11 +106,13 @@ defmodule LiveViewStudioWeb.AutocompleteLive do
     send(self(), {:run_city_search, city})
 
     socket =
-      assign(socket,
-        city: city,
-        stores: [],
-        loading: true
-      )
+      socket
+      |> clear_flash()
+      |>  assign(socket,
+            city: city,
+            stores: [],
+            loading: true
+          )
 
     {:noreply, socket}
   end
