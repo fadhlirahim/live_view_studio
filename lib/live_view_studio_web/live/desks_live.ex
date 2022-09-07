@@ -79,13 +79,13 @@ defmodule LiveViewStudioWeb.DesksLive do
     "#{entry.uuid}.#{ext}"
   end
 
-  @s3_bucket "liveview-uploads"
+  @s3_bucket "db.sg"
 
   defp s3_url, do: "//#{@s3_bucket}.s3.amazonaws.com"
 
   defp generate_metadata(entry, socket) do
     config = %{
-      region: "us-west-2",
+      region: "ap-southeast-1",
       access_key_id: System.fetch_env!("AWS_ACCESS_KEY_ID"),
       secret_access_key: System.fetch_env!("AWS_SECRET_ACCESS_KEY")
     }
