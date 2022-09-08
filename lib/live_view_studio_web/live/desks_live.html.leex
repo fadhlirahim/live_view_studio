@@ -19,9 +19,16 @@
     or drag and drop here
   </div>
 
-  <%= for {_ref, err} <- @uploads.photo.errors do %>
+  <%# old way to render error %>
+  <%#= for {ref, err} <- @uploads.photo.errors, ref == @uploads.photo.ref do %>
+    <%# <div class="error"> %>
+      <%#= error_to_string(err) %>
+    <%# </div> %>
+  <%# end %>
+  <%# a better way to render error %>
+  <%= for err <- upload_errors(@uploads.photo) do %>
     <div class="error">
-      <%= humanize(err) %>
+      <%= error_to_string(err) %>
     </div>
   <% end %>
 
@@ -44,7 +51,7 @@
 
       <%= for err <- upload_errors(@uploads.photo, entry) do %>
         <div class="error">
-          <%= humanize(err) %>
+          <%= error_to_string(err) %>
         </div>
       <% end %>
     </div>
