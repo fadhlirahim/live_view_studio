@@ -4,7 +4,8 @@
             Routes.user_registration_path(@socket, :create),
             phx_submit: "save",
             phx_change: "validate",
-            phx_trigger_action: @trigger_submit %>
+            phx_trigger_action: @trigger_submit,
+            phx_debounce: "blur" %>
     <%= label f, :email %>
     <%= email_input f, :email, required: true %>
     <%= error_tag f, :email %>

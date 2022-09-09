@@ -1,19 +1,19 @@
 defmodule LiveViewStudioWeb.ServerComponent do
-  use LiveViewStudioWeb, :live_component
+  use Phoenix.LiveComponent
 
   alias LiveViewStudio.Servers
 
   def render(assigns) do
-    ~L"""
-    <div class="card">
+    ~H"""
+    <div id={"server-#{@selected_server.id}"} class="card">
       <div class="header">
         <h2><%= @selected_server.name %></h2>
-        <button
-          class="<%= @selected_server.status %>"
-          phx-click="toggle-status"
-          phx-value-id="<%= @selected_server.id %>"
-          phx-target="<%= @myself %>"
-          phx-disable-with="Saving...">
+        <button class={@selected_server.status}
+                phx-click="toggle-status"
+                phx-debounce="100"
+                phx-value-id={@selected_server.id}
+                phx-disable-with="Saving..."
+                phx-target={@myself}>
           <%= @selected_server.status %>
         </button>
       </div>
@@ -48,13 +48,19 @@ defmodule LiveViewStudioWeb.ServerComponent do
     """
   end
 
+  # The handler for the "toggle-status" event no longer needs to
+  # update the list of servers since that now happens when handling
+  # a broadcast message
   def handle_event("toggle-status", %{"id" => id}, socket) do
     server = Servers.get_server!(id)
 
+    # Update the server's status to the opposite of its current status:
     new_status = if server.status == "up", do: "down", else: "up"
 
-    {:ok, _server} = Servers.update_server(server, %{status: new_status})
+    {:ok, _server} =
+      Servers.update_server(server, %{status: new_status})
 
     {:noreply, socket}
   end
+
 end

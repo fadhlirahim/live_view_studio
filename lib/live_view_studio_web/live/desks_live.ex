@@ -23,7 +23,7 @@ defmodule LiveViewStudioWeb.DesksLive do
         accept: ~w(.png .jpeg .jpg),
         max_entries: 3,
         max_file_size: 10_000_000,
-        external: &generate_metadata/2
+        # external: &generate_metadata/2 # to enable s3
       )
 
     {:ok, socket, temporary_assigns: [desks: []]}
@@ -34,7 +34,8 @@ defmodule LiveViewStudioWeb.DesksLive do
 
     urls =
       for entry <- completed do
-        Path.join(s3_url(), filename(entry))
+        # Path.join(s3_url(), filename(entry)) # to enable s3
+        Routes.static_path(socket, "/uploads/#{filename(entry)}")
       end
 
     desk = %Desk{photo_urls: urls}
@@ -67,8 +68,9 @@ defmodule LiveViewStudioWeb.DesksLive do
   end
 
   def consume_photos(socket, desk) do
-    consume_uploaded_entries(socket, :photo, fn _meta, _entry ->
-      :ok
+    consume_uploaded_entries(socket, :photo, fn meta, entry ->
+      dest = Path.join("priv/static/uploads", filename(entry))
+      File.cp!(meta.path, dest)
     end)
 
     {:ok, desk}
@@ -79,13 +81,13 @@ defmodule LiveViewStudioWeb.DesksLive do
     "#{entry.uuid}.#{ext}"
   end
 
-  @s3_bucket "liveview-uploads"
+  @s3_bucket "db.sg"
 
   defp s3_url, do: "//#{@s3_bucket}.s3.amazonaws.com"
 
   defp generate_metadata(entry, socket) do
     config = %{
-      region: "us-west-2",
+      region: "ap-southeast-1",
       access_key_id: System.fetch_env!("AWS_ACCESS_KEY_ID"),
       secret_access_key: System.fetch_env!("AWS_SECRET_ACCESS_KEY")
     }
@@ -107,4 +109,13 @@ defmodule LiveViewStudioWeb.DesksLive do
 
     {:ok, metadata, socket}
   end
+
+  def error_to_string(:too_large),
+    do: "File too large (max 10 MB)."
+
+  def error_to_string(:too_many_files),
+    do: "You've selected too many files."
+
+  def error_to_string(:not_accepted),
+    do: "You've selected an unacceptable file type."
 end

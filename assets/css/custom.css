@@ -390,6 +390,10 @@ header {
         @apply text-white bg-indigo-900;
       }
 
+      .add {
+        @apply bg-indigo-600;
+      }
+
       .status {
         @apply h-4 w-4 rounded-full mr-2;
       }
@@ -425,10 +429,6 @@ header {
 
     .wrapper {
       @apply flex-1 max-w-2xl mr-auto px-6;
-    }
-
-    h2 {
-      @apply text-center text-2xl font-bold mb-4;
     }
 
     form {
@@ -492,7 +492,7 @@ header {
         @apply px-6 py-5 border-b border-gray-200 flex items-center flex-wrap justify-between;
 
         h2 {
-          @apply mb-0 text-xl font-semibold text-indigo-800;
+          @apply text-xl font-semibold text-indigo-800 mb-0;
         }
       }
 
@@ -677,6 +677,11 @@ header {
       @apply flex-1 mr-4;
     }
 
+    input[type="text"]:focus,
+    textarea:focus {
+      @apply outline-none border-indigo-300 ring ring-indigo-300;
+    }
+
     input[type="text"],
     input[type="tel"] {
       @apply w-full appearance-none px-3 py-2 border border-cool-gray-400 rounded-md transition duration-150 ease-in-out text-base leading-5 text-xl;
@@ -847,6 +852,7 @@ form[action="/users/settings"] {
   }
 }
 
+
 /* Top Secret */
 
 #top-secret {
@@ -937,6 +943,10 @@ form[action="/users/settings"] {
 }
 
 /* Key Events */
+/*
+/*
+ * Copied from Tailwind v1.0
+ */
 
 #key-events {
   @apply max-w-sm mx-auto;

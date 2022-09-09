@@ -1,10 +1,14 @@
-defmodule LiveViewStudioWeb.SortLive do
+defmodule LiveViewStudioWeb.VehiclesLive do
   use LiveViewStudioWeb, :live_view
 
-  alias LiveViewStudio.Donations
+  alias LiveViewStudio.Vehicles
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, total_donations: Donations.count_donations()), temporary_assigns: [donations: []]}
+    {
+      :ok,
+      assign(socket, total_vehicles: Vehicles.count_vehicles()),
+      temporary_assigns: [vehicles: []]
+    }
   end
 
   def handle_params(params, _url, socket) do
@@ -17,23 +21,23 @@ defmodule LiveViewStudioWeb.SortLive do
     paginate_options = %{page: page, per_page: per_page}
     sort_options = %{sort_by: sort_by, sort_order: sort_order}
 
-    donations =
-      Donations.list_donations(
+    vehicles =
+      Vehicles.list_vehicles(
         paginate: paginate_options,
         sort: sort_options
       )
 
     socket =
       assign(socket,
-        options: Map.merge(paginate_options, sort_options),
-        donations: donations
+        options:  Map.merge(paginate_options, sort_options),
+        vehicles: vehicles
       )
 
     {:noreply, socket}
   end
 
   def handle_event("select-per-page", %{"per-page" => per_page}, socket) do
-    per_page = String.to_integer(per_page)
+    per_page = param_to_integer(per_page, 5)
 
     socket =
       push_patch(socket,
@@ -51,8 +55,17 @@ defmodule LiveViewStudioWeb.SortLive do
     {:noreply, socket}
   end
 
-  defp expires_class(donation) do
-    if Donations.almost_expired?(donation), do: "eat-now", else: "fresh"
+  def handle_event("paginate", %{"key" => "ArrowRight"}, socket) do
+    {:noreply, goto_page(socket, socket.assigns.options.page + 1)}
+  end
+
+  def handle_event("paginate", %{"key" => "ArrowLeft"}, socket) do
+    {:noreply, goto_page(socket, socket.assigns.options.page - 1)}
+  end
+
+  def handle_event("paginate", %{"key" => key}, socket) do
+    IO.inspect(key)
+    {:noreply, socket}
   end
 
   defp pagination_link(socket, text, page, options, class) do
@@ -72,11 +85,6 @@ defmodule LiveViewStudioWeb.SortLive do
 
   defp sort_link(socket, text, sort_by, options) do
     text =
-      # if sort_by == options.sort_by do
-      #   text <> emoji(options.sort_order)
-      # else
-      #   text
-      # end
       case options do
         %{sort_by: ^sort_by, sort_order: _sort_order} ->
           text <> emoji(options.sort_order)
@@ -97,6 +105,23 @@ defmodule LiveViewStudioWeb.SortLive do
     )
   end
 
+  defp goto_page(socket, page) when page > 0 do
+    push_patch(socket,
+        to:
+          Routes.live_path(
+            socket,
+            __MODULE__,
+            page: page,
+            per_page: socket.assigns.options.per_page,
+            sort_by: socket.assigns.options.sort_by,
+            sort_order: socket.assigns.options.sort_order
+          )
+      )
+  end
+
+  defp goto_page(socket, _page), do: socket
+
+
   defp toggle_sort_order(:asc), do: :desc
   defp toggle_sort_order(:desc), do: :asc
 
@@ -104,7 +129,6 @@ defmodule LiveViewStudioWeb.SortLive do
   defp emoji(:desc), do: "👆"
 
   defp param_to_integer(nil, default_value), do: default_value
-
   defp param_to_integer(param, default_value) do
     case Integer.parse(param) do
       {number, _} ->

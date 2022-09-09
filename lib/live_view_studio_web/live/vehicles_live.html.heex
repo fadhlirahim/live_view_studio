@@ -1,4 +1,4 @@
-<h1>Food Bank Donations</h1>
+<h1>🚙 Vehicles 🚘</h1>
 <div id="donations" phx-window-keyup="paginate" phx-throttle="500">
   <form id="select-per-page" phx-change="select-per-page">
     Show
@@ -11,31 +11,34 @@
     <table>
       <thead>
         <tr>
-          <th class="item">
-            Item
+          <th>
+            <%= sort_link(@socket, "ID", :id, @options) %>
           </th>
           <th>
-            Quantity
+            <%= sort_link(@socket, "Make", :make, @options) %>
           </th>
           <th>
-            Days Until Expires
+            <%= sort_link(@socket, "Model", :model, @options) %>
+          </th>
+          <th>
+            <%= sort_link(@socket, "Color", :color, @options) %>
           </th>
         </tr>
       </thead>
       <tbody>
-        <%= for donation <- @donations do %>
-          <tr id="donation-<%= donation.id %>">
-            <td class="item">
-              <span class="id"><%= donation.id %></span>
-              <%= donation.emoji %> <%= donation.item %>
+        <%= for vehicle <- @vehicles do %>
+          <tr id={"vehicle-#{vehicle.id}"}>
+            <td>
+              <%= vehicle.id %>
             </td>
             <td>
-              <%= donation.quantity %> lbs
+              <%= vehicle.make %>
             </td>
             <td>
-              <span class="<%= expires_class(donation) %>">
-                <%= donation.days_until_expires %>
-              </span>
+              <%= vehicle.model %>
+            </td>
+            <td>
+              <%= vehicle.color %>
             </td>
           </tr>
         <% end %>
@@ -47,21 +50,26 @@
           <%= pagination_link(@socket,
                               "Previous",
                               @options.page - 1,
-                              @options.per_page,
+                              @options,
                               "previous") %>
         <% end %>
         <%= for i <- (@options.page - 2)..(@options.page + 2), i > 0 do %>
-          <%= pagination_link(@socket,
+          <%= if i <= ceil(@total_vehicles / @options.per_page) do %>
+            <%= pagination_link(@socket,
                                 i,
                                 i,
-                                @options.per_page,
+                                @options,
                                 (if i == @options.page, do: "active")) %>
+          <% end %>
         <% end %>
-        <%= pagination_link(@socket,
+
+        <%= if (@options.page * @options.per_page) < @total_vehicles do %>
+          <%= pagination_link(@socket,
                               "Next",
                               @options.page + 1,
-                              @options.per_page,
+                              @options,
                               "next") %>
+        <% end %>
       </div>
     </div>
   </div>

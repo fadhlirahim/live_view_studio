@@ -1,0 +1,41 @@
+<h1>Servers</h1>
+
+<div id="servers">
+  <div class="sidebar">
+    <nav>
+      <%= live_patch "New Server",
+            to: Routes.servers_path(@socket, :new),
+                 class: "button" %>
+
+      <%= for server <- @servers do %>
+        <div>
+          <%= live_patch link_body(server),
+                to: Routes.live_path(
+                          @socket,
+                          __MODULE__,
+                          id: server.id
+                    ),
+                class: if server == @selected_server, do: "active" %>
+        </div>
+      <% end %>
+    </nav>
+  </div>
+
+  <div id="servers" class="main" >
+    <div class="wrapper">
+      <%= if @live_action == :new do %>
+        <%= live_component @socket,
+                         LiveViewStudioWeb.ServerFormComponent,
+                         id: :new %>
+
+
+      <% else %>
+        <%= live_component @socket,
+                          LiveViewStudioWeb.ServerComponent,
+                          id: "server-#{@selected_server.id}",
+                          selected_server: @selected_server %>
+      <% end %>
+
+    </div>
+  </div>
+</div>

@@ -51,6 +51,10 @@ defmodule LiveViewStudio.Donations do
     |> Repo.all()
   end
 
+  def count_donations do
+    Repo.aggregate(Donation, :count, :id)
+  end
+
   @doc """
   Gets a single donation.
 
