@@ -1,4 +1,6 @@
 # LiveView Studio
+ 
+Completed the PragStudio LiveView Pro Video tutorials with extra exercises.
 
 ## Installation
 
